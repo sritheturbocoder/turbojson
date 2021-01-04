@@ -6,7 +6,7 @@ plugins {
     id 'jacoco'
 }
 
-group 'com.gobbleminds'
+group 'com.author.srikanthr'
 version '1.0-SNAPSHOT'
 
 repositories {

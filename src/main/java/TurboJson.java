@@ -1,6 +1,6 @@
-public class GobbleJson {
-    GobbleJson() {
+public class TurboJson {
 
+    TurboJson() {
     }
 
     public String fromJson(String json) {
