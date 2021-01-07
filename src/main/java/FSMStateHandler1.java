@@ -31,13 +31,13 @@ public class FSMStateHandler1 implements Callable<Boolean>, IFSMStateHandler {
 
             if (ctx.L.getInputChar() >= '1' && ctx.L.getInputChar() <= '9') {
                 ctx.L.getStringBuilder().append((char) ctx.L.getInputChar());
-                ctx.NextState = 3;
+                ctx.nextState = 3;
                 return true;
             }
 
             switch (ctx.L.getInputChar()) {
                 case '"':
-                    ctx.NextState = 19;
+                    ctx.nextState = 19;
                     ctx.Return = true;
                     return true;
 
@@ -47,30 +47,30 @@ public class FSMStateHandler1 implements Callable<Boolean>, IFSMStateHandler {
                 case ']':
                 case '{':
                 case '}':
-                    ctx.NextState = 1;
+                    ctx.nextState = 1;
                     ctx.Return = true;
                     return true;
 
                 case '-':
                     ctx.L.getStringBuilder().append ((char) ctx.L.getInputChar());
-                    ctx.NextState = 2;
+                    ctx.nextState = 2;
                     return true;
 
                 case '0':
                     ctx.L.getStringBuilder().append ((char) ctx.L.getInputChar());
-                    ctx.NextState = 4;
+                    ctx.nextState = 4;
                     return true;
 
                 case 'f':
-                    ctx.NextState = 12;
+                    ctx.nextState = 12;
                     return true;
 
                 case 'n':
-                    ctx.NextState = 16;
+                    ctx.nextState = 16;
                     return true;
 
                 case 't':
-                    ctx.NextState = 9;
+                    ctx.nextState = 9;
                     return true;
 
                 case '\'':
@@ -78,7 +78,7 @@ public class FSMStateHandler1 implements Callable<Boolean>, IFSMStateHandler {
                         return false;
 
                     ctx.L.setInputChar('"');
-                    ctx.NextState = 23;
+                    ctx.nextState = 23;
                     ctx.Return = true;
                     return true;
 
@@ -86,7 +86,7 @@ public class FSMStateHandler1 implements Callable<Boolean>, IFSMStateHandler {
                     if (!ctx.L.isAllowComments())
                         return false;
 
-                    ctx.NextState = 25;
+                    ctx.nextState = 25;
                     return true;
 
                 default:

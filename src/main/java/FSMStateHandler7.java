@@ -28,7 +28,7 @@ public class FSMStateHandler7 implements Callable<Boolean>, IFSMStateHandler {
 
         if (ctx.L.getInputChar() >= '0' && ctx.L.getInputChar() <= '9') {
             ctx.L.getStringBuilder().append ((char) ctx.L.getInputChar());
-            ctx.NextState = 8;
+            ctx.nextState = 8;
             return true;
         }
 
@@ -36,7 +36,7 @@ public class FSMStateHandler7 implements Callable<Boolean>, IFSMStateHandler {
             case '+':
             case '-':
                 ctx.L.getStringBuilder().append ((char) ctx.L.getInputChar());
-                ctx.NextState = 8;
+                ctx.nextState = 8;
                 return true;
 
             default:

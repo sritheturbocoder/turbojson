@@ -33,7 +33,7 @@ public class FSMStateHandler8 implements Callable<Boolean>, IFSMStateHandler {
             if (ctx.L.getInputChar() == ' ' ||
                     ctx.L.getInputChar() >= '\t' && ctx.L.getInputChar() <= '\r') {
                 ctx.Return = true;
-                ctx.NextState = 1;
+                ctx.nextState = 1;
                 return true;
             }
 
@@ -43,7 +43,7 @@ public class FSMStateHandler8 implements Callable<Boolean>, IFSMStateHandler {
                 case '}':
                     ctx.L.ungetChar();
                     ctx.Return = true;
-                    ctx.NextState = 1;
+                    ctx.nextState = 1;
                     return true;
 
                 default:

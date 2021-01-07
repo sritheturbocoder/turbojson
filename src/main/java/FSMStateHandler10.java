@@ -27,7 +27,7 @@ public class FSMStateHandler10 implements Callable<Boolean>, IFSMStateHandler {
         ctx.L.getChar();
 
         if (ctx.L.getInputChar() == 'u') {
-            ctx.NextState = 11;
+            ctx.nextState = 11;
             return true;
         }
         return false;

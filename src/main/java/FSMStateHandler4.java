@@ -29,7 +29,7 @@ public class FSMStateHandler4 implements Callable<Boolean>, IFSMStateHandler {
         if (ctx.L.getInputChar() == ' ' ||
                 ctx.L.getInputChar() >= '\t' && ctx.L.getInputChar() <= '\r') {
             ctx.Return = true;
-            ctx.NextState = 1;
+            ctx.nextState = 1;
             return true;
         }
 
@@ -39,18 +39,18 @@ public class FSMStateHandler4 implements Callable<Boolean>, IFSMStateHandler {
             case '}':
                 ctx.L.ungetChar();
                 ctx.Return = true;
-                ctx.NextState = 1;
+                ctx.nextState = 1;
                 return true;
 
             case '.':
                 ctx.L.getStringBuilder().append((char) ctx.L.getInputChar());
-                ctx.NextState = 5;
+                ctx.nextState = 5;
                 return true;
 
             case 'e':
             case 'E':
                 ctx.L.getStringBuilder().append((char) ctx.L.getInputChar());
-                ctx.NextState = 7;
+                ctx.nextState = 7;
                 return true;
 
             default:

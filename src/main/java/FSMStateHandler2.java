@@ -28,13 +28,13 @@ public class FSMStateHandler2 implements Callable<Boolean>, IFSMStateHandler {
 
         if (ctx.L.getInputChar() >= '1' && ctx.L.getInputChar() <= '9') {
             ctx.L.getStringBuilder().append((char) ctx.L.getInputChar());
-            ctx.NextState = 3;
+            ctx.nextState = 3;
             return true;
         }
 
         if (ctx.L.getInputChar() == '0') {
             ctx.L.getStringBuilder().append((char) ctx.L.getInputChar());
-            ctx.NextState = 4;
+            ctx.nextState = 4;
             return true;
         }
         return false;

@@ -27,7 +27,7 @@ public class FSMStateHandler9 implements Callable<Boolean>, IFSMStateHandler {
         ctx.L.getChar();
 
         if (ctx.L.getInputChar() == 'r') {
-            ctx.NextState = 10;
+            ctx.nextState = 10;
             return true;
         }
         return false;

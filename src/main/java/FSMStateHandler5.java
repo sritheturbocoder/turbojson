@@ -29,7 +29,7 @@ public class FSMStateHandler5 implements Callable<Boolean>, IFSMStateHandler {
 
         if (ctx.L.getInputChar() >= '0' && ctx.L.getInputChar() <= '9') {
             ctx.L.getStringBuilder().append ((char) ctx.L.getInputChar());
-            ctx.NextState = 6;
+            ctx.nextState = 6;
             return true;
         }
 
