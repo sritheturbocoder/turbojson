@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -23,22 +24,22 @@ public class FSMStateHandler1 implements Callable<Boolean>, IFSMStateHandler {
         return this.state1();
     }
 
-    public boolean state1() {
-        while (ctx.L.getChar()) {
-            if (ctx.L.getInputChar() == ' ' ||
-                    ctx.L.getInputChar() >= '\t' && ctx.L.getInputChar() <= '\r')
+    public boolean state1() throws IOException {
+        while (ctx.lexer.getChar()) {
+            if (ctx.lexer.getInputChar() == ' ' ||
+                    ctx.lexer.getInputChar() >= '\t' && ctx.lexer.getInputChar() <= '\r')
                 continue;
 
-            if (ctx.L.getInputChar() >= '1' && ctx.L.getInputChar() <= '9') {
-                ctx.L.getStringBuilder().append((char) ctx.L.getInputChar());
+            if (ctx.lexer.getInputChar() >= '1' && ctx.lexer.getInputChar() <= '9') {
+                ctx.lexer.getStringBuilder().append((char) ctx.lexer.getInputChar());
                 ctx.nextState = 3;
                 return true;
             }
 
-            switch (ctx.L.getInputChar()) {
+            switch (ctx.lexer.getInputChar()) {
                 case '"':
                     ctx.nextState = 19;
-                    ctx.Return = true;
+                    ctx.fsmReturn = true;
                     return true;
 
                 case ',':
@@ -48,16 +49,16 @@ public class FSMStateHandler1 implements Callable<Boolean>, IFSMStateHandler {
                 case '{':
                 case '}':
                     ctx.nextState = 1;
-                    ctx.Return = true;
+                    ctx.fsmReturn = true;
                     return true;
 
                 case '-':
-                    ctx.L.getStringBuilder().append ((char) ctx.L.getInputChar());
+                    ctx.lexer.getStringBuilder().append ((char) ctx.lexer.getInputChar());
                     ctx.nextState = 2;
                     return true;
 
                 case '0':
-                    ctx.L.getStringBuilder().append ((char) ctx.L.getInputChar());
+                    ctx.lexer.getStringBuilder().append ((char) ctx.lexer.getInputChar());
                     ctx.nextState = 4;
                     return true;
 
@@ -74,16 +75,16 @@ public class FSMStateHandler1 implements Callable<Boolean>, IFSMStateHandler {
                     return true;
 
                 case '\'':
-                    if (!ctx.L.isAllowSingleQuotedStrings())
+                    if (!ctx.lexer.isAllowSingleQuotedStrings())
                         return false;
 
-                    ctx.L.setInputChar('"');
+                    ctx.lexer.setInputChar('"');
                     ctx.nextState = 23;
-                    ctx.Return = true;
+                    ctx.fsmReturn = true;
                     return true;
 
                 case '/':
-                    if (!ctx.L.isAllowComments())
+                    if (!ctx.lexer.isAllowComments())
                         return false;
 
                     ctx.nextState = 25;
@@ -98,7 +99,7 @@ public class FSMStateHandler1 implements Callable<Boolean>, IFSMStateHandler {
     }
 
     @Override
-    public Future<Boolean> registerHandler() {
+    public Future<Boolean> submitTask() {
         return executor.submit(this);
     }
 }

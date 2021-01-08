@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -23,27 +24,26 @@ public class FSMStateHandler22 implements Callable<Boolean>, IFSMStateHandler {
         return this.state22();
     }
 
-    private boolean state22()
-    {
+    private boolean state22() throws IOException {
         int counter = 0;
         int mult    = 4096;
 
-        ctx.L.setUnichar(0);
+        ctx.lexer.setUnichar(0);
 
-        while (ctx.L.getChar()) {
+        while (ctx.lexer.getChar()) {
 
-            if (ctx.L.getInputChar() >= '0' && ctx.L.getInputChar() <= '9' ||
-                    ctx.L.getInputChar() >= 'A' && ctx.L.getInputChar() <= 'F' ||
-                    ctx.L.getInputChar() >= 'a' && ctx.L.getInputChar() <= 'f') {
+            if (ctx.lexer.getInputChar() >= '0' && ctx.lexer.getInputChar() <= '9' ||
+                    ctx.lexer.getInputChar() >= 'A' && ctx.lexer.getInputChar() <= 'F' ||
+                    ctx.lexer.getInputChar() >= 'a' && ctx.lexer.getInputChar() <= 'f') {
 
-                ctx.L.setUnichar(ctx.L.getUnichar() + getHexValue(ctx.L.getInputChar()) * mult);
+                ctx.lexer.setUnichar(ctx.lexer.getUnichar() + getHexValue(ctx.lexer.getInputChar()) * mult);
 
                 counter++;
                 mult /= 16;
 
                 if (counter == 4) {
-                    ctx.L.getStringBuilder().append ((char)ctx.L.getUnichar());
-                    ctx.nextState = ctx.StateStack;
+                    ctx.lexer.getStringBuilder().append ((char)ctx.lexer.getUnichar());
+                    ctx.nextState = ctx.stateStack;
                     return true;
                 }
                 continue;
@@ -69,7 +69,7 @@ public class FSMStateHandler22 implements Callable<Boolean>, IFSMStateHandler {
     }
 
     @Override
-    public Future<Boolean> registerHandler() {
+    public Future<Boolean> submitTask() {
         return executor.submit(this);
     }
 }

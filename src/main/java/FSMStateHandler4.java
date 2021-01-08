@@ -1,11 +1,12 @@
+import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 public class FSMStateHandler4 implements Callable<Boolean>, IFSMStateHandler {
 
-    private FSMContext ctx;
-    private ExecutorService executor;
+    private final FSMContext ctx;
+    private final ExecutorService executor;
 
     public FSMStateHandler4(FSMContext ctx, ExecutorService executor) {
         this.ctx = ctx;
@@ -22,34 +23,33 @@ public class FSMStateHandler4 implements Callable<Boolean>, IFSMStateHandler {
         return this.state4();
     }
 
-    private boolean state4()
-    {
-        ctx.L.getChar();
+    private boolean state4() throws IOException {
+        ctx.lexer.getChar();
 
-        if (ctx.L.getInputChar() == ' ' ||
-                ctx.L.getInputChar() >= '\t' && ctx.L.getInputChar() <= '\r') {
-            ctx.Return = true;
+        if (ctx.lexer.getInputChar() == ' ' ||
+                ctx.lexer.getInputChar() >= '\t' && ctx.lexer.getInputChar() <= '\r') {
+            ctx.fsmReturn = true;
             ctx.nextState = 1;
             return true;
         }
 
-        switch (ctx.L.getInputChar()) {
+        switch (ctx.lexer.getInputChar()) {
             case ',':
             case ']':
             case '}':
-                ctx.L.ungetChar();
-                ctx.Return = true;
+                ctx.lexer.ungetChar();
+                ctx.fsmReturn = true;
                 ctx.nextState = 1;
                 return true;
 
             case '.':
-                ctx.L.getStringBuilder().append((char) ctx.L.getInputChar());
+                ctx.lexer.getStringBuilder().append((char) ctx.lexer.getInputChar());
                 ctx.nextState = 5;
                 return true;
 
             case 'e':
             case 'E':
-                ctx.L.getStringBuilder().append((char) ctx.L.getInputChar());
+                ctx.lexer.getStringBuilder().append((char) ctx.lexer.getInputChar());
                 ctx.nextState = 7;
                 return true;
 
@@ -59,7 +59,7 @@ public class FSMStateHandler4 implements Callable<Boolean>, IFSMStateHandler {
     }
 
     @Override
-    public Future<Boolean> registerHandler() {
+    public Future<Boolean> submitTask() {
         return executor.submit(this);
     }
 }

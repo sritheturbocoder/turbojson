@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -22,10 +23,9 @@ public class FSMStateHandler27 implements Callable<Boolean>, IFSMStateHandler {
         return this.state27();
     }
 
-    private boolean state27()
-    {
-        while (ctx.L.getChar()) {
-            if (ctx.L.getInputChar() == '*') {
+    private boolean state27() throws IOException {
+        while (ctx.lexer.getChar()) {
+            if (ctx.lexer.getInputChar() == '*') {
                 ctx.nextState = 28;
                 return true;
             }
@@ -35,7 +35,7 @@ public class FSMStateHandler27 implements Callable<Boolean>, IFSMStateHandler {
     }
 
     @Override
-    public Future<Boolean> registerHandler() {
+    public Future<Boolean> submitTask() {
         return executor.submit(this);
     }
 }
