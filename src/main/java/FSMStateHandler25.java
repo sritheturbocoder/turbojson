@@ -4,8 +4,8 @@ import java.util.concurrent.Future;
 
 public class FSMStateHandler25 implements Callable<Boolean>, IFSMStateHandler {
 
-    private FSMContext ctx;
-    private ExecutorService executor;
+    private final FSMContext ctx;
+    private final ExecutorService executor;
 
     public FSMStateHandler25(FSMContext ctx, ExecutorService executor) {
         this.ctx = ctx;
