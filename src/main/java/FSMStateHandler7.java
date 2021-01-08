@@ -5,13 +5,14 @@ import java.util.concurrent.Future;
 
 public class FSMStateHandler7 implements Callable<Boolean>, IFSMStateHandler {
 
-    private FSMContext ctx;
-    private ExecutorService executor;
+    private final FSMContext ctx;
+    private final ExecutorService executor;
 
     public FSMStateHandler7(FSMContext ctx, ExecutorService executor) {
         this.ctx = ctx;
         this.executor = executor;
     }
+
     /**
      * Computes a result, or throws an exception if unable to do so.
      *
@@ -27,7 +28,7 @@ public class FSMStateHandler7 implements Callable<Boolean>, IFSMStateHandler {
         ctx.lexer.getChar();
 
         if (ctx.lexer.getInputChar() >= '0' && ctx.lexer.getInputChar() <= '9') {
-            ctx.lexer.getStringBuilder().append ((char) ctx.lexer.getInputChar());
+            ctx.lexer.getStringBuilder().append((char) ctx.lexer.getInputChar());
             ctx.nextState = 8;
             return true;
         }
@@ -35,7 +36,7 @@ public class FSMStateHandler7 implements Callable<Boolean>, IFSMStateHandler {
         switch (ctx.lexer.getInputChar()) {
             case '+':
             case '-':
-                ctx.lexer.getStringBuilder().append ((char) ctx.lexer.getInputChar());
+                ctx.lexer.getStringBuilder().append((char) ctx.lexer.getInputChar());
                 ctx.nextState = 8;
                 return true;
 

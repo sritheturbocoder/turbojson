@@ -5,13 +5,14 @@ import java.util.concurrent.Future;
 
 public class FSMStateHandler6 implements Callable<Boolean>, IFSMStateHandler {
 
-    private FSMContext ctx;
-    private ExecutorService executor;
+    private final FSMContext ctx;
+    private final ExecutorService executor;
 
     public FSMStateHandler6(FSMContext ctx, ExecutorService executor) {
         this.ctx = ctx;
         this.executor = executor;
     }
+
     /**
      * Computes a result, or throws an exception if unable to do so.
      *

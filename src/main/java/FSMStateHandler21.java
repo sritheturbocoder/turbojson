@@ -12,6 +12,20 @@ public class FSMStateHandler21 implements Callable<Boolean>, IFSMStateHandler {
         this.ctx = ctx;
         this.executor = executor;
     }
+
+    private static char processEscChar(int esc_char) {
+        // Unreachable
+        return switch (esc_char) {
+            case '"', '\'', '\\', '/' -> (char) esc_char;
+            case 'n' -> '\n';
+            case 't' -> '\t';
+            case 'r' -> '\r';
+            case 'b' -> '\b';
+            case 'f' -> '\f';
+            default -> '?';
+        };
+    }
+
     /**
      * Computes a result, or throws an exception if unable to do so.
      *
@@ -40,7 +54,7 @@ public class FSMStateHandler21 implements Callable<Boolean>, IFSMStateHandler {
             case 'n':
             case 'r':
             case 't':
-                ctx.lexer.getStringBuilder().append (
+                ctx.lexer.getStringBuilder().append(
                         processEscChar(ctx.lexer.getInputChar()));
                 ctx.nextState = ctx.stateStack;
                 return true;
@@ -48,20 +62,6 @@ public class FSMStateHandler21 implements Callable<Boolean>, IFSMStateHandler {
             default:
                 return false;
         }
-    }
-
-    private static char processEscChar(int esc_char)
-    {
-        // Unreachable
-        return switch (esc_char) {
-            case '"', '\'', '\\', '/' -> (char) esc_char;
-            case 'n' -> '\n';
-            case 't' -> '\t';
-            case 'r' -> '\r';
-            case 'b' -> '\b';
-            case 'f' -> '\f';
-            default -> '?';
-        };
     }
 
     @Override

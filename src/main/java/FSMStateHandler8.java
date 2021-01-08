@@ -12,6 +12,7 @@ public class FSMStateHandler8 implements Callable<Boolean>, IFSMStateHandler {
         this.ctx = ctx;
         this.executor = executor;
     }
+
     /**
      * Computes a result, or throws an exception if unable to do so.
      *
@@ -23,10 +24,10 @@ public class FSMStateHandler8 implements Callable<Boolean>, IFSMStateHandler {
         return this.state8();
     }
 
-    private boolean state8 () throws IOException {
+    private boolean state8() throws IOException {
         while (ctx.lexer.getChar()) {
             if (ctx.lexer.getInputChar() >= '0' && ctx.lexer.getInputChar() <= '9') {
-                ctx.lexer.getStringBuilder().append ((char) ctx.lexer.getInputChar());
+                ctx.lexer.getStringBuilder().append((char) ctx.lexer.getInputChar());
                 continue;
             }
 

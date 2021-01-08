@@ -13,6 +13,18 @@ public class FSMStateHandler22 implements Callable<Boolean>, IFSMStateHandler {
         this.executor = executor;
     }
 
+    private static int getHexValue(int digit) {
+        return switch (digit) {
+            case 'a', 'A' -> 10;
+            case 'b', 'B' -> 11;
+            case 'c', 'C' -> 12;
+            case 'd', 'D' -> 13;
+            case 'e', 'E' -> 14;
+            case 'f', 'F' -> 15;
+            default -> digit - '0';
+        };
+    }
+
     /**
      * Computes a result, or throws an exception if unable to do so.
      *
@@ -26,7 +38,7 @@ public class FSMStateHandler22 implements Callable<Boolean>, IFSMStateHandler {
 
     private boolean state22() throws IOException {
         int counter = 0;
-        int mult    = 4096;
+        int mult = 4096;
 
         ctx.lexer.setUnichar(0);
 
@@ -42,7 +54,7 @@ public class FSMStateHandler22 implements Callable<Boolean>, IFSMStateHandler {
                 mult /= 16;
 
                 if (counter == 4) {
-                    ctx.lexer.getStringBuilder().append ((char)ctx.lexer.getUnichar());
+                    ctx.lexer.getStringBuilder().append((char) ctx.lexer.getUnichar());
                     ctx.nextState = ctx.stateStack;
                     return true;
                 }
@@ -53,19 +65,6 @@ public class FSMStateHandler22 implements Callable<Boolean>, IFSMStateHandler {
         }
 
         return true;
-    }
-
-    private static int getHexValue(int digit)
-    {
-        return switch (digit) {
-            case 'a', 'A' -> 10;
-            case 'b', 'B' -> 11;
-            case 'c', 'C' -> 12;
-            case 'd', 'D' -> 13;
-            case 'e', 'E' -> 14;
-            case 'f', 'F' -> 15;
-            default -> digit - '0';
-        };
     }
 
     @Override

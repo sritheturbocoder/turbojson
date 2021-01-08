@@ -9,16 +9,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-class FSMContext
-{
+class FSMContext {
     public boolean fsmReturn;
     public int nextState;
     public Lexer lexer;
     public int stateStack;
 }
 
-class ParserToken
-{
+class ParserToken {
     // Lexer tokens (see section A.1.1. of the manual)
     public static final int None = Character.MAX_VALUE + 1;
 
@@ -60,37 +58,29 @@ class ParserToken
     public static final int Epsilon = 65554;
 }
 
-class Lexer
-{
-    private int[] fsmTable = new int[28];
+class Lexer {
+    private final ExecutorService executor = Executors.newCachedThreadPool();
+    private final int[] fsmTable = new int[28];
     private List<IFSMStateHandler> fsmHandler;
-
     private boolean allowComments;
     private boolean allowSingleQuotedStrings;
     private boolean endOfInput;
-
-    private FSMContext fsmContext;
-
+    private final FSMContext fsmContext;
     private int inputBuffer;
     private int inputChar;
     private int state;
     private int token;
     private int unichar;
-
-    private Reader reader;
-
-    private StringBuilder stringBuilder;
+    private final Reader reader;
+    private final StringBuilder stringBuilder;
     private String stringValue;
 
-    private final ExecutorService executor = Executors.newCachedThreadPool();
-
-    public Lexer (Reader reader)
-    {
+    public Lexer(Reader reader) {
         setAllowComments(true);
         setAllowSingleQuotedStrings(true);
 
         inputBuffer = 0;
-        stringBuilder = new StringBuilder (128);
+        stringBuilder = new StringBuilder(128);
         state = 1;
         setEndOfInput(false);
         this.reader = reader;
@@ -142,26 +132,26 @@ class Lexer
         fsmTable[5] = ParserToken.Number;
         fsmTable[6] = 0;
         fsmTable[7] = ParserToken.Number;
-        fsmTable[8] =0;
-        fsmTable[9] =0;
+        fsmTable[8] = 0;
+        fsmTable[9] = 0;
         fsmTable[10] = ParserToken.True;
-        fsmTable[11] =0;
-        fsmTable[12] =0;
-        fsmTable[13] =0;
+        fsmTable[11] = 0;
+        fsmTable[12] = 0;
+        fsmTable[13] = 0;
         fsmTable[14] = ParserToken.False;
-        fsmTable[15] =0;
-        fsmTable[16] =0;
+        fsmTable[15] = 0;
+        fsmTable[16] = 0;
         fsmTable[17] = ParserToken.Null;
         fsmTable[18] = ParserToken.CharSeq;
         fsmTable[19] = ParserToken.Char;
-        fsmTable[20] =0;
-        fsmTable[21] =0;
+        fsmTable[20] = 0;
+        fsmTable[21] = 0;
         fsmTable[22] = ParserToken.CharSeq;
         fsmTable[23] = ParserToken.Char;
-        fsmTable[24] =0;
-        fsmTable[25] =0;
-        fsmTable[26] =0;
-        fsmTable[27] =0;
+        fsmTable[24] = 0;
+        fsmTable[25] = 0;
+        fsmTable[26] = 0;
+        fsmTable[27] = 0;
     }
 
     public void ungetChar() {
@@ -169,13 +159,13 @@ class Lexer
     }
 
     public boolean getChar() throws IOException {
-        if ((inputChar = NextChar ()) != -1)
+        if ((inputChar = NextChar()) != -1)
             return true;
         setEndOfInput(true);
         return false;
     }
 
-    private int NextChar () throws IOException {
+    private int NextChar() throws IOException {
         if (inputBuffer != 0) {
             int tmp = inputBuffer;
             inputBuffer = 0;
@@ -183,23 +173,23 @@ class Lexer
             return tmp;
         }
 
-        return reader.read ();
+        return reader.read();
     }
 
-    public boolean NextToken () throws JsonException, ExecutionException, InterruptedException {
+    public boolean NextToken() throws JsonException, ExecutionException, InterruptedException {
 
         fsmContext.fsmReturn = false;
 
         while (true) {
             IFSMStateHandler handler = fsmHandler.get(state - 1);
             Future<Boolean> booleanFuture = handler.submitTask();
-            if (! booleanFuture.get())
+            if (!booleanFuture.get())
                 throw new JsonException(getInputChar());
             if (isEndOfInput())
                 return false;
             if (fsmContext.fsmReturn) {
-                setStringValue(getStringBuilder().toString ());
-                getStringBuilder().delete (0, getStringBuilder().length());
+                setStringValue(getStringBuilder().toString());
+                getStringBuilder().delete(0, getStringBuilder().length());
                 setToken(fsmTable[state - 1]);
 
                 if (getToken() == ParserToken.Char)
@@ -266,11 +256,11 @@ class Lexer
         return stringBuilder;
     }
 
-    public void setUnichar(int unichar) {
-        this.unichar = unichar;
-    }
-
     public int getUnichar() {
         return unichar;
+    }
+
+    public void setUnichar(int unichar) {
+        this.unichar = unichar;
     }
 }

@@ -53,12 +53,12 @@ public class FSMStateHandler1 implements Callable<Boolean>, IFSMStateHandler {
                     return true;
 
                 case '-':
-                    ctx.lexer.getStringBuilder().append ((char) ctx.lexer.getInputChar());
+                    ctx.lexer.getStringBuilder().append((char) ctx.lexer.getInputChar());
                     ctx.nextState = 2;
                     return true;
 
                 case '0':
-                    ctx.lexer.getStringBuilder().append ((char) ctx.lexer.getInputChar());
+                    ctx.lexer.getStringBuilder().append((char) ctx.lexer.getInputChar());
                     ctx.nextState = 4;
                     return true;
 

@@ -5,8 +5,8 @@ import java.util.concurrent.Future;
 
 public class FSMStateHandler5 implements Callable<Boolean>, IFSMStateHandler {
 
-    private FSMContext ctx;
-    private ExecutorService executor;
+    private final FSMContext ctx;
+    private final ExecutorService executor;
 
     public FSMStateHandler5(FSMContext ctx, ExecutorService executor) {
         this.ctx = ctx;
@@ -28,7 +28,7 @@ public class FSMStateHandler5 implements Callable<Boolean>, IFSMStateHandler {
         ctx.lexer.getChar();
 
         if (ctx.lexer.getInputChar() >= '0' && ctx.lexer.getInputChar() <= '9') {
-            ctx.lexer.getStringBuilder().append ((char) ctx.lexer.getInputChar());
+            ctx.lexer.getStringBuilder().append((char) ctx.lexer.getInputChar());
             ctx.nextState = 6;
             return true;
         }

@@ -12,6 +12,7 @@ public class FSMStateHandler17 implements Callable<Boolean>, IFSMStateHandler {
         this.ctx = ctx;
         this.executor = executor;
     }
+
     /**
      * Computes a result, or throws an exception if unable to do so.
      *
@@ -23,7 +24,7 @@ public class FSMStateHandler17 implements Callable<Boolean>, IFSMStateHandler {
         return this.state17();
     }
 
-    private boolean state17 () throws IOException {
+    private boolean state17() throws IOException {
         ctx.lexer.getChar();
 
         if (ctx.lexer.getInputChar() == 'l') {
