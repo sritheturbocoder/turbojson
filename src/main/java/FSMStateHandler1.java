@@ -75,7 +75,7 @@ public class FSMStateHandler1 implements Callable<Boolean>, IFSMStateHandler {
                     return true;
 
                 case '\'':
-                    if (!ctx.lexer.isAllowSingleQuotedStrings())
+                    if (!ctx.lexer.getAllowSingleQuotedStrings())
                         return false;
 
                     ctx.lexer.setInputChar('"');
@@ -84,7 +84,7 @@ public class FSMStateHandler1 implements Callable<Boolean>, IFSMStateHandler {
                     return true;
 
                 case '/':
-                    if (!ctx.lexer.isAllowComments())
+                    if (!ctx.lexer.getAllowComments())
                         return false;
 
                     ctx.nextState = 25;
