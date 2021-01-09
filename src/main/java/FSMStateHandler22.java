@@ -14,15 +14,16 @@ public class FSMStateHandler22 implements Callable<Boolean>, IFSMStateHandler {
     }
 
     private static int getHexValue(int digit) {
-        return switch (digit) {
-            case 'a', 'A' -> 10;
-            case 'b', 'B' -> 11;
-            case 'c', 'C' -> 12;
-            case 'd', 'D' -> 13;
-            case 'e', 'E' -> 14;
-            case 'f', 'F' -> 15;
-            default -> digit - '0';
-        };
+        //noinspection EnhancedSwitchMigration
+        switch (digit) {
+            case 'a', 'A' : return  10;
+            case 'b', 'B' : return 11;
+            case 'c', 'C' : return 12;
+            case 'd', 'D' : return 13;
+            case 'e', 'E' : return 14;
+            case 'f', 'F' : return 15;
+            default : return digit - '0';
+        }
     }
 
     /**

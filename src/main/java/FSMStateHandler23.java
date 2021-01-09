@@ -26,19 +26,20 @@ public class FSMStateHandler23 implements Callable<Boolean>, IFSMStateHandler {
 
     private boolean state23() throws IOException {
         while (ctx.lexer.getChar()) {
+            //noinspection EnhancedSwitchMigration
             switch (ctx.lexer.getInputChar()) {
-                case '\'' -> {
+                case '\'' : {
                     ctx.lexer.ungetChar();
                     ctx.fsmReturn = true;
                     ctx.nextState = 24;
                     return true;
                 }
-                case '\\' -> {
+                case '\\' : {
                     ctx.stateStack = 23;
                     ctx.nextState = 21;
                     return true;
                 }
-                default -> ctx.lexer.getStringBuilder().append((char) ctx.lexer.getInputChar());
+                default : ctx.lexer.getStringBuilder().append((char) ctx.lexer.getInputChar());
             }
         }
 
