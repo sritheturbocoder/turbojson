@@ -16,13 +16,26 @@ public class FSMStateHandler21 implements Callable<Boolean>, IFSMStateHandler {
     private static char processEscChar(int esc_char) {
         //noinspection EnhancedSwitchMigration
         switch (esc_char) {
-            case '"', '\'', '\\', '/' : return (char) esc_char;
-            case 'n' : return '\n';
-            case 't' : return '\t';
-            case 'r' : return '\r';
-            case 'b' : return '\b';
-            case 'f' : return '\f';
-            default : return '?';
+            case '/':
+                return (char) esc_char;
+            case '\\':
+                return (char) esc_char;
+            case '\'':
+                return (char) esc_char;
+            case '"':
+                return (char) esc_char;
+            case 'n':
+                return '\n';
+            case 't':
+                return '\t';
+            case 'r':
+                return '\r';
+            case 'b':
+                return '\b';
+            case 'f':
+                return '\f';
+            default:
+                return '?';
         }
     }
 
