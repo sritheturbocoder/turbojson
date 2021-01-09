@@ -204,7 +204,7 @@ class Lexer {
         }
     }
 
-    public boolean isAllowComments() {
+    public boolean getAllowComments() {
         return allowComments;
     }
 
@@ -212,7 +212,7 @@ class Lexer {
         this.allowComments = allowComments;
     }
 
-    public boolean isAllowSingleQuotedStrings() {
+    public boolean getAllowSingleQuotedStrings() {
         return allowSingleQuotedStrings;
     }
 
