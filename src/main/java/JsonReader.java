@@ -8,7 +8,10 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.ExecutionException;
 
-public class JsonReader {
+/**
+ * Stream like access to JSON text
+*/
+class JsonReader {
 
     public boolean isSkip_non_members() {
         return skip_non_members;
@@ -48,27 +51,6 @@ public class JsonReader {
 
     public Object getToken_value() {
         return token_value;
-    }
-
-    public enum JsonToken
-    {
-        None,
-
-        ObjectStart,
-        PropertyName,
-        ObjectEnd,
-
-        ArrayStart,
-        ArrayEnd,
-
-        Int,
-        Long,
-        Double,
-
-        String,
-
-        Boolean,
-        Null
     }
 
     private Map<Integer, HashMap<Integer, int[]>> parse_table;
