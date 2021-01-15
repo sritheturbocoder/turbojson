@@ -1,25 +1,28 @@
+import exception.ArgumentNullException;
+import exception.JsonException;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
+import java.util.function.BiFunction;
 
 public class JsonMapper {
 
     private static int max_nesting_depth;
 
-    private static Map<Type, Callable<?>> base_exporters_table;
-    private static Map<Type, Callable<?>> custom_exporters_table;
+    private static Map<Type, BiFunction<Object, JsonWriter, Integer>> base_exporters_table;
+    private static Map<Type, BiFunction<Object, JsonWriter, Integer>> custom_exporters_table;
 
-    private static Map<Type, Map<Type, Callable<?>>> base_importers_table;
+    private static Map<Type, Map<Type, BiFunction<Object, JsonWriter, Integer>>> base_importers_table;
     private static Map<Type,
-            Map<Type, Callable<?>>> custom_importers_table;
+            Map<Type, BiFunction<Object, JsonWriter, Integer>>> custom_importers_table;
 
     private static Map<Type, ArrayMetadata> array_metadata;
     private static Object array_metadata_lock = new Object ();
 
-    private static Map<Type,
-            Map<Type, Method>> conv_ops;
+    private static HashMap<Type, HashMap<Type, Method>> conv_ops;
     private static Object conv_ops_lock = new Object ();
 
     private static Map<Type, ObjectMetadata> object_metadata;
@@ -31,4 +34,40 @@ public class JsonMapper {
 
     private static JsonWriter      static_writer;
     private static Object static_writer_lock = new Object ();
+
+    JsonMapper () throws ArgumentNullException {
+        max_nesting_depth = 100;
+
+        array_metadata = new HashMap<>();
+        conv_ops = new HashMap<>();
+        object_metadata = new HashMap<>();
+        type_properties = new HashMap<>();
+
+        static_writer = new JsonWriter ();
+
+        base_exporters_table   = new HashMap<>();
+        custom_exporters_table = new HashMap<>();
+
+        base_importers_table = new HashMap<>();
+        custom_importers_table = new HashMap<>();
+
+        registerBaseExporters ();
+        registerBaseImporters ();
+    }
+
+    private void registerBaseExporters() {
+        base_exporters_table.put(byte.class, (Object obj, JsonWriter writer) -> {
+            try {
+                writer.Write((int) obj);
+                return Constants.SUCCESS;
+            } catch (JsonException e) {
+                e.printStackTrace();
+                return Constants.FAILURE;
+            }
+        });
+    }
+
+    private void registerBaseImporters() {
+
+    }
 }
