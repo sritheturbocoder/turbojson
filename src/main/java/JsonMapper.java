@@ -6,11 +6,11 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class JsonMapper {
 
@@ -19,9 +19,9 @@ public class JsonMapper {
     private static Map<Type, BiFunction<Object, JsonWriter, Integer>> base_exporters_table;
     private static Map<Type, BiFunction<Object, JsonWriter, Integer>> custom_exporters_table;
 
-    private static Map<Type, Map<Type, BiFunction<Object, JsonWriter, Integer>>> base_importers_table;
+    private static Map<Type, Map<Type, Function<Object, Object>>> base_importers_table;
     private static Map<Type,
-            Map<Type, BiFunction<Object, JsonWriter, Integer>>> custom_importers_table;
+            Map<Type, Function<Object, Object>>> custom_importers_table;
 
     private static Map<Type, ArrayMetadata> array_metadata;
     private static Object array_metadata_lock = new Object ();
@@ -145,6 +145,22 @@ public class JsonMapper {
     }
 
     private void registerBaseImporters() {
+        registerImporter (base_importers_table, Integer.class,  Byte.class, (Object input) -> input);
+        registerImporter (base_importers_table, Integer.class,  Integer.class, (Object input) -> input);
+        registerImporter (base_importers_table, Integer.class,  Long.class, (Object input) -> input);
+        registerImporter (base_importers_table, Integer.class,  Short.class, (Object input) -> input);
+        registerImporter (base_importers_table, Integer.class,  Double.class, (Object input) -> input);
+        registerImporter (base_importers_table, String.class,  char.class, (Object input) -> input);
+        registerImporter (base_importers_table, String.class,  LocalDateTime.class, (Object input) -> input);
+    }
 
+    private static void registerImporter (
+            Map<Type, Map<Type, Function<Object, Object>>> table,
+            Type json_type, Type value_type, Function<Object, Object> importer)
+    {
+        if (! table.containsKey (json_type))
+            table.put (json_type, new HashMap<>());
+
+        table.get(json_type).put(value_type,importer);
     }
 }
