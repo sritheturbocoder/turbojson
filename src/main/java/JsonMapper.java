@@ -3,6 +3,10 @@ import exception.JsonException;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +69,32 @@ public class JsonMapper {
                 return Constants.FAILURE;
             }
         });
+
+        base_exporters_table.put(char.class, (Object obj, JsonWriter writer) -> {
+            try {
+                writer.Write((char) obj);
+                return Constants.SUCCESS;
+            } catch (JsonException e) {
+                e.printStackTrace();
+                return Constants.FAILURE;
+            }
+        });
+
+        base_exporters_table.put(LocalDateTime.class, (Object obj, JsonWriter writer) -> {
+            try {
+                LocalDateTime dateTime = (LocalDateTime) obj;
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+                String dateTimeString = dateFormat.format(dateTime);
+                writer.Write(dateTimeString);
+                return Constants.SUCCESS;
+            } catch (JsonException e) {
+                e.printStackTrace();
+                return Constants.FAILURE;
+            }
+        });
+
+
+
     }
 
     private void registerBaseImporters() {
