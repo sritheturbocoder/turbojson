@@ -93,8 +93,55 @@ public class JsonMapper {
             }
         });
 
+        base_exporters_table.put(Boolean.class, (Object obj, JsonWriter writer) -> {
+            try {
+                writer.Write((boolean) obj);
+                return Constants.SUCCESS;
+            } catch (JsonException e) {
+                e.printStackTrace();
+                return Constants.FAILURE;
+            }
+        });
 
+        base_exporters_table.put(Double.class, (Object obj, JsonWriter writer) -> {
+            try {
+                writer.Write((double) obj);
+                return Constants.SUCCESS;
+            } catch (JsonException e) {
+                e.printStackTrace();
+                return Constants.FAILURE;
+            }
+        });
 
+        base_exporters_table.put(Integer.class, (Object obj, JsonWriter writer) -> {
+            try {
+                writer.Write((Integer) obj);
+                return Constants.SUCCESS;
+            } catch (JsonException e) {
+                e.printStackTrace();
+                return Constants.FAILURE;
+            }
+        });
+
+        base_exporters_table.put(long.class, (Object obj, JsonWriter writer) -> {
+            try {
+                writer.Write((long) obj);
+                return Constants.SUCCESS;
+            } catch (JsonException e) {
+                e.printStackTrace();
+                return Constants.FAILURE;
+            }
+        });
+
+        base_exporters_table.put(String.class, (Object obj, JsonWriter writer) -> {
+            try {
+                writer.Write((String) obj);
+                return Constants.SUCCESS;
+            } catch (JsonException e) {
+                e.printStackTrace();
+                return Constants.FAILURE;
+            }
+        });
     }
 
     private void registerBaseImporters() {
