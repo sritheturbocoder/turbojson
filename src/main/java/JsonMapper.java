@@ -6,9 +6,7 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -162,5 +160,24 @@ public class JsonMapper {
             table.put (json_type, new HashMap<>());
 
         table.get(json_type).put(value_type,importer);
+    }
+
+    private static void AddArrayMetadata (Type type)
+    {
+        if (array_metadata.containsKey (type))
+            return;
+
+        ArrayMetadata data = new ArrayMetadata ();
+
+        data.setIs_array(type.getClass().isArray());
+
+        if (Arrays.stream(type.getClass().getInterfaces()).anyMatch(inter -> inter.toString().contains("Collection"))) {
+            data.setIs_list(true);
+        }
+
+        /* TODO: Find a way to check for array indexer through reflection */
+
+
+
     }
 }
