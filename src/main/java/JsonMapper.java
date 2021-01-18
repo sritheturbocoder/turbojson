@@ -175,7 +175,8 @@ public class JsonMapper {
             data.setIs_list(true);
         }
 
-        /* TODO: Find a way to check for array indexer through reflection */
+        /* TODO: Find return data type of get method using reflection
+        *   or find datatype of first argument of put method*/
 
 
 
