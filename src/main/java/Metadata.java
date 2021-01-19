@@ -3,10 +3,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-class PropertyMetadata
+class FieldMethodMetadata
 {
-    public Field[] info;
-    public Method[] methods;
+    public Field info;
+    public Method mInfo;
     public boolean       isField;
     public java.lang.reflect.Type type;
 }
@@ -47,8 +47,7 @@ class ObjectMetadata
 {
     private Type element_type;
     private boolean is_dictionary;
-    private Map<String, PropertyMetadata> properties;
-
+    private Map<String, FieldMethodMetadata> fieldMethodMetadataMap;
 
     public Type getElement_type() {
         return element_type;
@@ -66,13 +65,11 @@ class ObjectMetadata
         this.is_dictionary = is_dictionary;
     }
 
-    public Map<String, PropertyMetadata> getProperties() {
-        return properties;
+    public Map<String, FieldMethodMetadata> fieldAndMethodsMetaData() {
+        return fieldMethodMetadataMap;
     }
 
-    public void setProperties(Map<String, PropertyMetadata> properties) {
-        this.properties = properties;
+    public void setProperties(Map<String, FieldMethodMetadata> properties) {
+        this.fieldMethodMetadataMap = properties;
     }
 }
-
-
