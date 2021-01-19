@@ -175,10 +175,9 @@ public class JsonMapper {
             data.setIs_list(true);
         }
 
-        /* TODO: Find return data type of get method using reflection
-        *   or find datatype of first argument of put method*/
+        Method[] methods = type.getClass().getMethods();
 
-
-
+        Arrays.stream(methods).filter(method -> method.getName().equals("get")).filter(method -> method.getParameterCount() > 0).filter(method -> method.getParameters()[0].getClass().toString().equals(int.class.toString())).findFirst().ifPresent(method -> data.setElement_type(method.getParameters()[0].getClass()));
+        
     }
 }
