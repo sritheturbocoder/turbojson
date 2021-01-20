@@ -1,6 +1,7 @@
 import exception.ArgumentNullException;
 import exception.JsonException;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -9,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -233,5 +235,45 @@ public class JsonMapper {
         }
 
         object_metadata.put (type, data);
+    }
+
+    private Object readValue (Type inst_type, JsonReader reader) throws InterruptedException, ExecutionException, JsonException, IOException {
+
+        reader.Read ();
+
+        if (reader.getToken() == JsonToken.ArrayEnd)
+            return null;
+
+        if (reader.getToken() == JsonToken.Double ||
+                reader.getToken() == JsonToken.Int ||
+                reader.getToken() == JsonToken.Long ||
+                reader.getToken() == JsonToken.String ||
+                reader.getToken() == JsonToken.Boolean) {
+
+            Type json_type = reader.getToken_value().getClass();
+
+            if (inst_type.getClass().isAssignableFrom((Class<?>) json_type)) {
+                return reader.getToken_value();
+            }
+
+            if (custom_importers_table.containsKey (json_type) &&
+                    custom_importers_table.get(json_type).containsKey (inst_type)) {
+                Function<Object, Object> importer = custom_importers_table.get(json_type).get(inst_type);
+                return importer.apply(reader.getToken_value());
+            }
+
+            if (base_importers_table.containsKey (json_type) &&
+                    base_importers_table.get(json_type).containsKey (inst_type)) {
+                Function<Object, Object> importer = base_importers_table.get(json_type).get(inst_type);
+                return importer.apply(reader.getToken_value());
+            }
+
+
+            throw new JsonException (String.format (
+                    "Can't assign value %s (type %s) to type %s",
+                    reader.getToken_value(), json_type, inst_type));
+        }
+
+        return null; //still some more work to do
     }
 }
