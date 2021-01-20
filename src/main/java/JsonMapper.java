@@ -163,7 +163,7 @@ public class JsonMapper {
         table.get(json_type).put(value_type, importer);
     }
 
-    private static void AddArrayMetadata(Type type) {
+    private static void addArrayMetadata(Type type) {
         if (array_metadata.containsKey(type))
             return;
 
@@ -184,7 +184,7 @@ public class JsonMapper {
                               .ifPresent(method -> data.setElement_type(method.getParameters()[0].getClass()));
     }
 
-    private static void AddObjectMetadata (Type type)
+    private static void addObjectMetadata(Type type)
     {
         if (object_metadata.containsKey (type))
             return;
