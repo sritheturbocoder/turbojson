@@ -299,7 +299,7 @@ public class JsonMapper {
                 instance = Array.newInstance ((Class<?>) elem_type, n);
 
                 for (int i = 0; i < n; i++)
-                    ((ArrayList) instance).setValue(list.get(i), i);
+                    ((ArrayList) instance).set((int)list.get(i), i);
             } else {
                 instance = list;
             }
