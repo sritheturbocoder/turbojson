@@ -2,10 +2,7 @@ import exception.ArgumentNullException;
 import exception.JsonException;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -237,7 +234,7 @@ public class JsonMapper {
         object_metadata.put (type, data);
     }
 
-    private Object readValue (Type inst_type, JsonReader reader) throws InterruptedException, ExecutionException, JsonException, IOException {
+    private Object readValue (Type inst_type, JsonReader reader) throws InterruptedException, ExecutionException, JsonException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         reader.Read ();
 
@@ -272,6 +269,60 @@ public class JsonMapper {
             throw new JsonException (String.format (
                     "Can't assign value %s (type %s) to type %s",
                     reader.getToken_value(), json_type, inst_type));
+        }
+
+        Object instance;
+
+        if (reader.getToken() == JsonToken.ArrayStart) {
+
+            addArrayMetadata (inst_type);
+            ArrayMetadata t_data = array_metadata.get(inst_type);
+
+            if (! t_data.isIs_array() && ! t_data.isIs_list())
+                throw new JsonException (String.format(
+                        "Type %s can't act as an array",
+                        inst_type));
+
+            List<Object> list = new ArrayList<>();
+            Type elem_type = inst_type.getClass ();
+
+            while (true) {
+                Object item = readValue (elem_type, reader);
+                if (item == null && reader.getToken() == JsonToken.ArrayEnd)
+                    break;
+
+                list.add (item);
+            }
+
+            if (t_data.isIs_array()) {
+                int n = list.size();
+                instance = Array.newInstance ((Class<?>) elem_type, n);
+
+                for (int i = 0; i < n; i++)
+                    ((ArrayList) instance).setValue(list.get(i), i);
+            } else {
+                instance = list;
+            }
+        } else if (reader.getToken() == JsonToken.ObjectStart) {
+            addObjectMetadata (inst_type);
+            ObjectMetadata t_data = object_metadata.get(inst_type);
+
+            instance = inst_type.getClass().getConstructor().newInstance();
+
+            while (true) {
+                reader.Read ();
+
+                if (reader.getToken() == JsonToken.ObjectEnd)
+                    break;
+
+                String property = (String) reader.getToken_value();
+
+                if (t_data.fieldAndMethodsMetaData().containsKey (property)) {
+                    //get value from method / field
+                } else {
+                    // find other ways to read value
+                }
+            }
         }
 
         return null; //still some more work to do
